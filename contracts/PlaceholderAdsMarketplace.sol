@@ -1,14 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-/**
- * @title PlaceholderAdsMarketplace
- * @dev Simplified contract to conduct a single-slot Dutch Auction among multiple advertisers.
- *      - Only one Trusted Operator (owner) is allowed to start/end auctions.
- *      - Multiple publishers (advertisers) can place bids (sending ETH).
- *      - The first bid >= the current Dutch Auction price wins.
- */
-contract PlaceholderAdsMarketplace {
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+
+contract PlaceholderAdsMarketplace is ReentrancyGuard {
     // --------------------------------------
     // EVENTS
     // --------------------------------------
@@ -18,36 +14,27 @@ contract PlaceholderAdsMarketplace {
         uint256 startTime,
         uint256 duration
     );
-    event AuctionEnded(
-        address winner,
-        uint256 winningBid,
-        uint256 tokenId
-    );
-    event BidPlaced(
-        address bidder,
-        uint256 bidAmount,
-        uint256 tokenId
-    );
+    event AuctionEnded(address winner, uint256 winningBid, uint256 tokenId);
+    event BidPlaced(address bidder, uint256 bidAmount, uint256 tokenId);
 
     // --------------------------------------
     // STORAGE
     // --------------------------------------
-
-    address public operator;  // Trusted Operator (e.g., the entity that controls the display)
-    
-    // Data structure for a single Dutch Auction
+    address public operator;
+    IERC20 public biddingToken; // The ERC20 token used for bidding
+    uint256 public constant MINIMUM_BID_PERIOD = 20 seconds;
     struct Auction {
-        uint256 startPrice;     // Price at which the auction starts
-        uint256 endPrice;       // Minimum price the auction can drop to
-        uint256 startTime;      // Timestamp when the auction officially begins
-        uint256 duration;       // How long it takes to go from startPrice down to endPrice
-        address winner;         // Address of the winning bidder
-        uint256 winningBid;     // Amount (in wei) that the winner paid
-        uint256 winningTokenId; // The NFT ID the winner wants to display
-        bool ended;             // Marks if the auction ended
+        uint256 startPrice;
+        uint256 endPrice;
+        uint256 startTime;
+        uint256 duration;
+        address winner;
+        uint256 winningBid;
+        uint256 winningTokenId;
+        uint256 lastBidTime;
+        bool ended;
     }
 
-    // We assume only ONE slot/auction for simplicity
     Auction public currentAuction;
 
     // --------------------------------------
@@ -61,7 +48,8 @@ contract PlaceholderAdsMarketplace {
     modifier auctionActive() {
         require(
             block.timestamp >= currentAuction.startTime &&
-            block.timestamp <= currentAuction.startTime + currentAuction.duration,
+                block.timestamp <=
+                currentAuction.startTime + currentAuction.duration,
             "Auction not active"
         );
         require(!currentAuction.ended, "Auction already ended");
@@ -71,120 +59,134 @@ contract PlaceholderAdsMarketplace {
     // --------------------------------------
     // CONSTRUCTOR
     // --------------------------------------
-    constructor() {
-        // The deployer is the Trusted Operator
+    constructor(address _biddingToken) {
+        require(_biddingToken != address(0), "Invalid token address");
         operator = msg.sender;
+        biddingToken = IERC20(_biddingToken);
     }
 
     // --------------------------------------
     // AUCTION LOGIC
     // --------------------------------------
+    function startAuction(uint256 _startPrice, uint256 _endPrice)
+        external
+        onlyOperator
+    {
+        require(_startPrice > 0, "Start price must be greater than 0"); // Added
+        require(_endPrice <= _startPrice, "End price must be <= start price");
+        uint256 startTime = block.timestamp;
+        uint256 duration = 3 minutes; // Fixed 3-minute duration
 
-    /**
-     * @dev Operator starts a Dutch auction by setting the parameters.
-     * @param _startPrice Price at which the auction starts.
-     * @param _endPrice Lowest price the auction can drop to.
-     * @param _startTime Timestamp at which the auction starts.
-     * @param _duration How many seconds from startPrice to endPrice.
-     *
-     * NOTE: For a typical immediate start, set _startTime = block.timestamp.
-     */
-    function startAuction(
-        uint256 _startPrice,
-        uint256 _endPrice,
-        uint256 _startTime,
-        uint256 _duration
-    ) external onlyOperator {
-        require(_endPrice <= _startPrice, "endPrice must be <= startPrice");
-        require(_duration > 0, "Duration must be > 0");
-
-        // Initialize a new Auction
         currentAuction = Auction({
             startPrice: _startPrice,
             endPrice: _endPrice,
-            startTime: _startTime,
-            duration: _duration,
+            startTime: startTime,
+            duration: duration,
             winner: address(0),
             winningBid: 0,
             winningTokenId: 0,
+            lastBidTime: 0,
             ended: false
         });
 
-        emit AuctionStarted(_startPrice, _endPrice, _startTime, _duration);
+        emit AuctionStarted(_startPrice, _endPrice, startTime, duration);
     }
 
-    /**
-     * @dev Computes the current price of the Dutch Auction.
-     *      Price decreases linearly from startPrice to endPrice over 'duration'.
-     */
     function getCurrentPrice() public view returns (uint256) {
         if (
-            block.timestamp <= currentAuction.startTime ||
+            block.timestamp < currentAuction.startTime ||
             currentAuction.startTime == 0 ||
             currentAuction.ended
         ) {
-            // Before or after the auction time, return the startPrice.
             return currentAuction.startPrice;
         }
 
-        // If time has already ended, return the endPrice
         uint256 elapsed = block.timestamp - currentAuction.startTime;
         if (elapsed >= currentAuction.duration) {
             return currentAuction.endPrice;
         }
 
-        // Calculate price decay
-        // price = startPrice - ( (startPrice - endPrice) * elapsed / duration )
-        uint256 totalPriceDiff = currentAuction.startPrice - currentAuction.endPrice;
-        uint256 currentPriceDrop = (totalPriceDiff * elapsed) / currentAuction.duration;
-        uint256 currentPrice = currentAuction.startPrice - currentPriceDrop;
+        // Calculate price drop using fixed-point arithmetic
+        uint256 totalPriceDiff = currentAuction.startPrice -
+            currentAuction.endPrice;
+        uint256 currentPriceDrop = (totalPriceDiff * elapsed * 1e18) /
+            currentAuction.duration;
+        currentPriceDrop = currentPriceDrop / 1e18; // Scale back after division
 
-        return currentPrice;
+        return currentAuction.startPrice - currentPriceDrop;
     }
 
-    /**
-     * @dev Places a bid. First bidder who sends >= currentPrice wins immediately.
-     * @param _tokenId The NFT (from PlaceholderAdsNFT) that the publisher wants to display upon winning.
-     */
-    function placeBid(uint256 _tokenId) external payable auctionActive {
-        uint256 price = getCurrentPrice();
-        require(msg.value >= price, "Bid not high enough");
+    function placeBid(uint256 _tokenId, uint256 _bidAmount)
+        external
+        nonReentrant
+        auctionActive
+    {
+        uint256 currentPrice = getCurrentPrice();
+        require(_bidAmount >= currentPrice, "Bid below current price");
+        require(_bidAmount > 0, "Bid amount must be greater than 0");
 
-        // Record the winner
+        // If bid equals start price, end auction immediately
+        if (_bidAmount >= currentAuction.startPrice) {
+            require(
+                biddingToken.allowance(msg.sender, address(this)) >= _bidAmount,
+                "Insufficient allowance"
+            );
+            require(
+                biddingToken.balanceOf(msg.sender) >= _bidAmount,
+                "Insufficient balance"
+            );
+            require(
+                biddingToken.transferFrom(msg.sender, operator, _bidAmount),
+                "Token transfer failed"
+            );
+
+            currentAuction.winner = msg.sender;
+            currentAuction.winningBid = _bidAmount;
+            currentAuction.winningTokenId = _tokenId;
+            currentAuction.ended = true;
+
+            emit BidPlaced(msg.sender, _bidAmount, _tokenId);
+            emit AuctionEnded(msg.sender, _bidAmount, _tokenId);
+            return;
+        }
+
+        // Regular bid - must be higher than current highest bid
+        if (currentAuction.winningBid > 0) {
+            require(
+                _bidAmount > currentAuction.winningBid,
+                "Must bid higher than current bid"
+            );
+            require(
+                block.timestamp >=
+                    currentAuction.lastBidTime + MINIMUM_BID_PERIOD,
+                "Minimum bid period not elapsed"
+            );
+        }
+
+        require(
+            biddingToken.allowance(msg.sender, address(this)) >= _bidAmount,
+            "Insufficient allowance"
+        );
+        require(
+            biddingToken.balanceOf(msg.sender) >= _bidAmount,
+            "Insufficient balance"
+        );
+        require(
+            biddingToken.transferFrom(msg.sender, operator, _bidAmount),
+            "Token transfer failed"
+        );
+
         currentAuction.winner = msg.sender;
-        currentAuction.winningBid = msg.value;
+        currentAuction.winningBid = _bidAmount;
         currentAuction.winningTokenId = _tokenId;
-        currentAuction.ended = true; // Auction ends immediately after a valid bid
+        currentAuction.lastBidTime = block.timestamp;
 
-        emit BidPlaced(msg.sender, msg.value, _tokenId);
-        emit AuctionEnded(msg.sender, msg.value, _tokenId);
-
-        // (Simplest approach) Transfer funds to the operator (or hold it in the contract).
-        // If you'd like to pay it out to the publisher or do profit-sharing, add that logic here:
-        payable(operator).transfer(msg.value);
-    }
-
-    /**
-     * @dev Operator can end the auction in case no one bids and time is over, or to force-end the auction.
-     *      This is optional since the auction is automatically ended upon a successful bid,
-     *      but you may want to allow the operator to finalize or do an emergency stop.
-     */
-    function endAuction() external onlyOperator {
-        require(!currentAuction.ended, "Auction already ended");
-
-        // If time hasn't ended but operator wants to end, that's an operator override
-        currentAuction.ended = true;
-
-        emit AuctionEnded(address(0), 0, 0); // Indicate no winner
+        emit BidPlaced(msg.sender, _bidAmount, _tokenId);
     }
 
     // --------------------------------------
     // VIEW / HELPER FUNCTIONS
     // --------------------------------------
-
-    /**
-     * @dev Returns information about the current auction state.
-     */
     function getAuctionInfo()
         external
         view
@@ -212,9 +214,6 @@ contract PlaceholderAdsMarketplace {
         );
     }
 
-    /**
-     * @dev Allows the operator to change to a new operator (if needed).
-     */
     function changeOperator(address _newOperator) external onlyOperator {
         require(_newOperator != address(0), "Invalid operator");
         operator = _newOperator;

@@ -6,7 +6,13 @@
 	"output": {
 		"abi": [
 			{
-				"inputs": [],
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_biddingToken",
+						"type": "address"
+					}
+				],
 				"stateMutability": "nonpayable",
 				"type": "constructor"
 			},
@@ -92,6 +98,32 @@
 				"type": "event"
 			},
 			{
+				"inputs": [],
+				"name": "MINIMUM_BID_PERIOD",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "biddingToken",
+				"outputs": [
+					{
+						"internalType": "contract IERC20",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "address",
@@ -144,19 +176,17 @@
 						"type": "uint256"
 					},
 					{
+						"internalType": "uint256",
+						"name": "lastBidTime",
+						"type": "uint256"
+					},
+					{
 						"internalType": "bool",
 						"name": "ended",
 						"type": "bool"
 					}
 				],
 				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "endAuction",
-				"outputs": [],
-				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -239,11 +269,16 @@
 						"internalType": "uint256",
 						"name": "_tokenId",
 						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_bidAmount",
+						"type": "uint256"
 					}
 				],
 				"name": "placeBid",
 				"outputs": [],
-				"stateMutability": "payable",
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -257,16 +292,6 @@
 						"internalType": "uint256",
 						"name": "_endPrice",
 						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_startTime",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_duration",
-						"type": "uint256"
 					}
 				],
 				"name": "startAuction",
@@ -276,38 +301,8 @@
 			}
 		],
 		"devdoc": {
-			"details": "Simplified contract to conduct a single-slot Dutch Auction among multiple advertisers.      - Only one Trusted Operator (owner) is allowed to start/end auctions.      - Multiple publishers (advertisers) can place bids (sending ETH).      - The first bid >= the current Dutch Auction price wins.",
 			"kind": "dev",
-			"methods": {
-				"changeOperator(address)": {
-					"details": "Allows the operator to change to a new operator (if needed)."
-				},
-				"endAuction()": {
-					"details": "Operator can end the auction in case no one bids and time is over, or to force-end the auction.      This is optional since the auction is automatically ended upon a successful bid,      but you may want to allow the operator to finalize or do an emergency stop."
-				},
-				"getAuctionInfo()": {
-					"details": "Returns information about the current auction state."
-				},
-				"getCurrentPrice()": {
-					"details": "Computes the current price of the Dutch Auction.      Price decreases linearly from startPrice to endPrice over 'duration'."
-				},
-				"placeBid(uint256)": {
-					"details": "Places a bid. First bidder who sends >= currentPrice wins immediately.",
-					"params": {
-						"_tokenId": "The NFT (from PlaceholderAdsNFT) that the publisher wants to display upon winning."
-					}
-				},
-				"startAuction(uint256,uint256,uint256,uint256)": {
-					"details": "Operator starts a Dutch auction by setting the parameters.",
-					"params": {
-						"_duration": "How many seconds from startPrice to endPrice. NOTE: For a typical immediate start, set _startTime = block.timestamp.",
-						"_endPrice": "Lowest price the auction can drop to.",
-						"_startPrice": "Price at which the auction starts.",
-						"_startTime": "Timestamp at which the auction starts."
-					}
-				}
-			},
-			"title": "PlaceholderAdsMarketplace",
+			"methods": {},
 			"version": 1
 		},
 		"userdoc": {
@@ -332,12 +327,28 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/PlaceholderAdsMarketplace.sol": {
-			"keccak256": "0x8cf5b8b559baa5462faf22aa6a2647370279b037dece8f694ece88c17cb2cc2f",
+		"@openzeppelin/contracts/security/ReentrancyGuard.sol": {
+			"keccak256": "0xa535a5df777d44e945dd24aa43a11e44b024140fc340ad0dfe42acf4002aade1",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://a56630f95fc1b509d66fde70931640d7974e297a63c05a52257c48ad080b2859",
-				"dweb:/ipfs/QmdvDuQPwYW8rpTucFPTdbdKQW59MtYNKuShPiAG19EgTh"
+				"bzz-raw://41319e7f621f2dc3733511332c4fd032f8e32ad2aa7fd6f665c19741d9941a34",
+				"dweb:/ipfs/QmcYR3bd862GD1Bc7jwrU9bGxrhUu5na1oP964bDCu2id1"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+			"keccak256": "0xe06a3f08a987af6ad2e1c1e774405d4fe08f1694b67517438b467cecf0da0ef7",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://df6f0c459663c9858b6cba2cda1d14a7d05a985bed6d2de72bd8e78c25ee79db",
+				"dweb:/ipfs/QmeTTxZ7qVk9rjEv2R4CpCwdf8UMCcRqDNMvzNxHc3Fnn9"
+			]
+		},
+		"contracts/PlaceholderAdsMarketplace.sol": {
+			"keccak256": "0x60a1ace4ce7e62e2caa13eb6d411550f7a239814bfa596f7041d3d2196fbbd90",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://1606b272cdd225f9758b16e33df5db4ecf84975704d582459d22bd3ed68ee723",
+				"dweb:/ipfs/QmSr9M5Ly8qSH44gBgGDSHtrNzvX2PyxXoJLAVHiggcLJH"
 			]
 		}
 	},
