@@ -98,6 +98,44 @@
 				"type": "event"
 			},
 			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "PaymentClaimed",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "bytes32",
+						"name": "proofHash",
+						"type": "bytes32"
+					}
+				],
+				"name": "ProofSubmitted",
+				"type": "event"
+			},
+			{
 				"inputs": [],
 				"name": "MINIMUM_BID_PERIOD",
 				"outputs": [
@@ -132,6 +170,19 @@
 					}
 				],
 				"name": "changeOperator",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_tokenId",
+						"type": "uint256"
+					}
+				],
+				"name": "claimPayment",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -179,6 +230,16 @@
 						"internalType": "uint256",
 						"name": "lastBidTime",
 						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "proofSubmitted",
+						"type": "bool"
+					},
+					{
+						"internalType": "bool",
+						"name": "claimed",
+						"type": "bool"
 					},
 					{
 						"internalType": "bool",
@@ -298,6 +359,24 @@
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_tokenId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bytes32",
+						"name": "_proofHash",
+						"type": "bytes32"
+					}
+				],
+				"name": "submitProof",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
 			}
 		],
 		"devdoc": {
@@ -344,11 +423,11 @@
 			]
 		},
 		"contracts/PlaceholderAdsMarketplace.sol": {
-			"keccak256": "0x60a1ace4ce7e62e2caa13eb6d411550f7a239814bfa596f7041d3d2196fbbd90",
+			"keccak256": "0x8534683b7dca0ecb5c43e4496d1b47c9c546bb5ce803433de080b4723e45f487",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://1606b272cdd225f9758b16e33df5db4ecf84975704d582459d22bd3ed68ee723",
-				"dweb:/ipfs/QmSr9M5Ly8qSH44gBgGDSHtrNzvX2PyxXoJLAVHiggcLJH"
+				"bzz-raw://0bf2f331f394b08e14c8a806345256180e5b8a9889e10132cd4a47a17667fa8d",
+				"dweb:/ipfs/QmWJ4MxCzjpoxu2qZ9ULwLKe18UfmhwQgmBXND1HAJxQSa"
 			]
 		}
 	},

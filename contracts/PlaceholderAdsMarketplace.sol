@@ -16,6 +16,8 @@ contract PlaceholderAdsMarketplace is ReentrancyGuard {
     );
     event AuctionEnded(address winner, uint256 winningBid, uint256 tokenId);
     event BidPlaced(address bidder, uint256 bidAmount, uint256 tokenId);
+    event ProofSubmitted(uint256 tokenId, bytes32 proofHash);
+    event PaymentClaimed(uint256 tokenId, uint256 amount);
 
     // --------------------------------------
     // STORAGE
@@ -32,6 +34,8 @@ contract PlaceholderAdsMarketplace is ReentrancyGuard {
         uint256 winningBid;
         uint256 winningTokenId;
         uint256 lastBidTime;
+        bool proofSubmitted;
+        bool claimed;
         bool ended;
     }
 
@@ -86,6 +90,8 @@ contract PlaceholderAdsMarketplace is ReentrancyGuard {
             winningBid: 0,
             winningTokenId: 0,
             lastBidTime: 0,
+            proofSubmitted: false,
+            claimed: false,
             ended: false
         });
 
@@ -136,7 +142,11 @@ contract PlaceholderAdsMarketplace is ReentrancyGuard {
                 "Insufficient balance"
             );
             require(
-                biddingToken.transferFrom(msg.sender, operator, _bidAmount),
+                biddingToken.transferFrom(
+                    msg.sender,
+                    address(this),
+                    _bidAmount
+                ),
                 "Token transfer failed"
             );
 
@@ -182,6 +192,34 @@ contract PlaceholderAdsMarketplace is ReentrancyGuard {
         currentAuction.lastBidTime = block.timestamp;
 
         emit BidPlaced(msg.sender, _bidAmount, _tokenId);
+    }
+
+    function submitProof(uint256 _tokenId, bytes32 _proofHash)
+        external
+        onlyOperator
+    {
+        require(currentAuction.ended, "Auction not ended");
+        require(currentAuction.winningTokenId == _tokenId, "Invalid token ID");
+        require(!currentAuction.proofSubmitted, "Proof already submitted");
+
+        currentAuction.proofSubmitted = true;
+        emit ProofSubmitted(_tokenId, _proofHash);
+    }
+
+    // New function for claiming payment
+    function claimPayment(uint256 _tokenId) external onlyOperator {
+        require(currentAuction.ended, "Auction not ended");
+        require(currentAuction.proofSubmitted, "Proof not submitted");
+        require(!currentAuction.claimed, "Payment already claimed");
+        require(currentAuction.winningTokenId == _tokenId, "Invalid token ID");
+
+        currentAuction.claimed = true;
+        require(
+            biddingToken.transfer(operator, currentAuction.winningBid),
+            "Transfer failed"
+        );
+
+        emit PaymentClaimed(_tokenId, currentAuction.winningBid);
     }
 
     // --------------------------------------
