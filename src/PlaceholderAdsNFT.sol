@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+
 import "@openzeppelin/contracts/utils/Base64.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 
 contract PlaceholderAdsNFT is ERC721, Ownable {
     using Strings for uint256;
@@ -22,7 +23,7 @@ contract PlaceholderAdsNFT is ERC721, Ownable {
 
     event AdNFTMinted(address to, uint256 tokenId, AdData data);
 
-    constructor() ERC721("PlaceholderAds", "PHA") Ownable(msg.sender) {}
+    constructor() ERC721("PlaceholderAds", "PHA") Ownable(msg.sender) { }
 
     /**
      * @dev Mints a new AdNFT with complete metadata
@@ -39,7 +40,7 @@ contract PlaceholderAdsNFT is ERC721, Ownable {
 
         _safeMint(to, newTokenId);
 
-        _adMetadata[newTokenId] = AdData({title: title, content: text, imageURL: imageURL, publisher: to});
+        _adMetadata[newTokenId] = AdData({ title: title, content: text, imageURL: imageURL, publisher: to });
 
         emit AdNFTMinted(to, newTokenId, _adMetadata[newTokenId]);
 

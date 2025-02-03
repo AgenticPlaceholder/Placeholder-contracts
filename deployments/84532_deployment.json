@@ -1,0 +1,21 @@
+{
+  "network": 84532,
+  "contracts": {
+    "PlaceholderAdsNFT": {
+      "address": "0xf187111DC6e3B50997a56764E066eEA066D63DB3",
+      "deployedAt": 1738625928
+    },
+    "PlaceholderStableCoin": {
+      "address": "0xA546d049d33EB71193A02595240962a7BE6aFA95",
+      "deployedAt": 1738625928
+    },
+    "PlaceholderAdsMarketplace": {
+      "address": "0x1877cAE09C4f75DBa80864adac1859D02Ffb7447",
+      "deployedAt": 1738625928,
+      "constructorArgs": {
+        "nft": "0xf187111DC6e3B50997a56764E066eEA066D63DB3",
+        "stablecoin": "0xA546d049d33EB71193A02595240962a7BE6aFA95"
+      }
+    }
+  }
+}
