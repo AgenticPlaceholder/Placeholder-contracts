@@ -60,7 +60,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/AdSlotMarketplace.sol": "IPlaceholderAdsNFT"
+			"contracts/PlaceholderAdsMarketplace.sol": "IPlaceholderAdsNFT"
 		},
 		"evmVersion": "cancun",
 		"libraries": {},
@@ -210,12 +210,12 @@
 				"dweb:/ipfs/QmVUSvooZKEdEdap619tcJjTLcAuH6QBdZqAzWwnAXZAWJ"
 			]
 		},
-		"contracts/AdSlotMarketplace.sol": {
-			"keccak256": "0xe2ff9864b43cb8da5f108ed5ab11c977890d27091e6cc091895ed04bc5b662f9",
+		"contracts/PlaceholderAdsMarketplace.sol": {
+			"keccak256": "0xac15de136da2dbba5c5cbc7ba9846e7d995814cf3f496054ed843936feb2c067",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://3b2f84095c642d0ccafad9f4386047fb9050bbe906147a133ed471b2b3f01f2d",
-				"dweb:/ipfs/Qmf53GVXf8zjsPHMQJA2nK9zG9jRP23BuXpMDEy7UkjjrN"
+				"bzz-raw://c5f1a24412705283a90fd115321cc47e669786fd0c6adc8ae402cb98f8243e56",
+				"dweb:/ipfs/QmS3HjTFkrRDEDLZ2iJPrxEJNLxyHrq5V8BdE9SbqAwX4z"
 			]
 		}
 	},

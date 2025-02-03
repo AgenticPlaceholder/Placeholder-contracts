@@ -806,7 +806,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/AdSlotMarketplace.sol": "AdSlotMarketplace"
+			"contracts/PlaceholderAdsMarketplace.sol": "AdSlotMarketplace"
 		},
 		"evmVersion": "cancun",
 		"libraries": {},
@@ -956,7 +956,7 @@
 				"dweb:/ipfs/QmVUSvooZKEdEdap619tcJjTLcAuH6QBdZqAzWwnAXZAWJ"
 			]
 		},
-		"contracts/AdSlotMarketplace.sol": {
+		"contracts/PlaceholderAdsMarketplace.sol": {
 			"keccak256": "0xe2ff9864b43cb8da5f108ed5ab11c977890d27091e6cc091895ed04bc5b662f9",
 			"license": "MIT",
 			"urls": [

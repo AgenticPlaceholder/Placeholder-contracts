@@ -1,0 +1,345 @@
+{
+	"compiler": {
+		"version": "0.8.28+commit.7893614a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "winner",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "winningBid",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					}
+				],
+				"name": "AuctionEnded",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "startPrice",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "endPrice",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "startTime",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "duration",
+						"type": "uint256"
+					}
+				],
+				"name": "AuctionStarted",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "bidder",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "bidAmount",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					}
+				],
+				"name": "BidPlaced",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_newOperator",
+						"type": "address"
+					}
+				],
+				"name": "changeOperator",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "currentAuction",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "startPrice",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "endPrice",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "startTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "duration",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "winner",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "winningBid",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "winningTokenId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "ended",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "endAuction",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getAuctionInfo",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "startPrice",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "endPrice",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "startTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "duration",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "winner",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "winningBid",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "winningTokenId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "ended",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getCurrentPrice",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "operator",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_tokenId",
+						"type": "uint256"
+					}
+				],
+				"name": "placeBid",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_startPrice",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_endPrice",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_startTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_duration",
+						"type": "uint256"
+					}
+				],
+				"name": "startAuction",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"details": "Simplified contract to conduct a single-slot Dutch Auction among multiple advertisers.      - Only one Trusted Operator (owner) is allowed to start/end auctions.      - Multiple publishers (advertisers) can place bids (sending ETH).      - The first bid >= the current Dutch Auction price wins.",
+			"kind": "dev",
+			"methods": {
+				"changeOperator(address)": {
+					"details": "Allows the operator to change to a new operator (if needed)."
+				},
+				"endAuction()": {
+					"details": "Operator can end the auction in case no one bids and time is over, or to force-end the auction.      This is optional since the auction is automatically ended upon a successful bid,      but you may want to allow the operator to finalize or do an emergency stop."
+				},
+				"getAuctionInfo()": {
+					"details": "Returns information about the current auction state."
+				},
+				"getCurrentPrice()": {
+					"details": "Computes the current price of the Dutch Auction.      Price decreases linearly from startPrice to endPrice over 'duration'."
+				},
+				"placeBid(uint256)": {
+					"details": "Places a bid. First bidder who sends >= currentPrice wins immediately.",
+					"params": {
+						"_tokenId": "The NFT (from PlaceholderAdsNFT) that the publisher wants to display upon winning."
+					}
+				},
+				"startAuction(uint256,uint256,uint256,uint256)": {
+					"details": "Operator starts a Dutch auction by setting the parameters.",
+					"params": {
+						"_duration": "How many seconds from startPrice to endPrice. NOTE: For a typical immediate start, set _startTime = block.timestamp.",
+						"_endPrice": "Lowest price the auction can drop to.",
+						"_startPrice": "Price at which the auction starts.",
+						"_startTime": "Timestamp at which the auction starts."
+					}
+				}
+			},
+			"title": "PlaceholderAdsMarketplace",
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/PlaceholderAdsMarketplace.sol": "PlaceholderAdsMarketplace"
+		},
+		"evmVersion": "cancun",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/PlaceholderAdsMarketplace.sol": {
+			"keccak256": "0x8cf5b8b559baa5462faf22aa6a2647370279b037dece8f694ece88c17cb2cc2f",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://a56630f95fc1b509d66fde70931640d7974e297a63c05a52257c48ad080b2859",
+				"dweb:/ipfs/QmdvDuQPwYW8rpTucFPTdbdKQW59MtYNKuShPiAG19EgTh"
+			]
+		}
+	},
+	"version": 1
+}
