@@ -3,15 +3,13 @@ pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
 
 contract PlaceholderAdsNFT is ERC721, Ownable {
-    using Counters for Counters.Counter;
     using Strings for uint256;
 
-    Counters.Counter private _tokenIds;
+    uint256 private _nextTokenId;
 
     struct AdData {
         string title;
@@ -33,23 +31,15 @@ contract PlaceholderAdsNFT is ERC721, Ownable {
      * @param text Main ad content
      * @param imageURL URL to visual asset (PNG/JPEG/GIF)
      */
-    function createAd(
-        address to,
-        string memory title,
-        string memory text,
-        string memory imageURL
-    ) public returns (uint256) {
-        _tokenIds.increment();
-        uint256 newTokenId = _tokenIds.current();
+    function createAd(address to, string memory title, string memory text, string memory imageURL)
+        public
+        returns (uint256)
+    {
+        uint256 newTokenId = _nextTokenId++;
 
         _safeMint(to, newTokenId);
 
-        _adMetadata[newTokenId] = AdData({
-            title: title,
-            content: text,
-            imageURL: imageURL,
-            publisher: to
-        });
+        _adMetadata[newTokenId] = AdData({title: title, content: text, imageURL: imageURL, publisher: to});
 
         emit AdNFTMinted(to, newTokenId, _adMetadata[newTokenId]);
 
@@ -59,35 +49,39 @@ contract PlaceholderAdsNFT is ERC721, Ownable {
     /**
      * @dev Generates standards-compliant metadata
      */
-function tokenURI(uint256 tokenId)
-    public
-    view
-    override
-    returns (string memory)
-{
-    // Get metadata from storage
-    AdData memory data = _adMetadata[tokenId];
+    function tokenURI(uint256 tokenId) public view override returns (string memory) {
+        // Get metadata from storage
+        AdData memory data = _adMetadata[tokenId];
 
-    // Convert address to a string (Ensures 0x format)
-    string memory publisherAddress = Strings.toHexString(uint160(data.publisher), 20);
+        // Convert address to a string (Ensures 0x format)
+        string memory publisherAddress = Strings.toHexString(uint160(data.publisher), 20);
 
-    // Build metadata JSON (Properly formatted)
-    bytes memory json = abi.encodePacked(
-        '{',
-            '"name": "', data.title, '",',
-            '"description": "', data.title, ' - ', data.content, '",',
-            '"image": "', data.imageURL, '",',
+        // Build metadata JSON (Properly formatted)
+        bytes memory json = abi.encodePacked(
+            "{",
+            '"name": "',
+            data.title,
+            '",',
+            '"description": "',
+            data.title,
+            " - ",
+            data.content,
+            '",',
+            '"image": "',
+            data.imageURL,
+            '",',
             '"attributes": [',
-                '{"trait_type": "Publisher", "value": "', publisherAddress, '"}' 
-            ']',
-        '}'
-    );
+            '{"trait_type": "Publisher", "value": "',
+            publisherAddress,
+            '"}' "]",
+            "}"
+        );
 
-    // Encode JSON in Base64
-    string memory base64Json = Base64.encode(json);
+        // Encode JSON in Base64
+        string memory base64Json = Base64.encode(json);
 
-    return string(abi.encodePacked("data:application/json;base64,", base64Json));
-}
+        return string(abi.encodePacked("data:application/json;base64,", base64Json));
+    }
 
     // Getters for external access
     function getAdData(uint256 tokenId) public view returns (AdData memory) {
