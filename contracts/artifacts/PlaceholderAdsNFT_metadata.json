@@ -973,11 +973,11 @@
 			]
 		},
 		"contracts/PlaceholderAdsNFT.sol": {
-			"keccak256": "0xcd01eb92bbeb5000f759f6662e0df1471528daf6ba1f2c5e8ae7834ce31a5684",
+			"keccak256": "0x741c5db8a4b0b1b1ea87477ab36eb4609a41c65f7b1f5bd7e7c0c98514c93a2b",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://9c6b97f481bfe19bc9970274d366087b7b41530427aff55bf16c3a53de7f6f4d",
-				"dweb:/ipfs/QmXwVQb1eKGYdAHL1mLehpF1JvkdnxDKXkPoe2iyPH4c92"
+				"bzz-raw://a94cc936044ef5a7001f762136964dd182474a973c6df6290d852841c7d654e8",
+				"dweb:/ipfs/QmQABvws76eubeUZLxwauQjG7NyGuQkCuogJwbrUT1tHkW"
 			]
 		}
 	},

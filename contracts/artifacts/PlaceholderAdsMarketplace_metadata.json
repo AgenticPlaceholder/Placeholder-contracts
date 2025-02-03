@@ -266,6 +266,11 @@
 					},
 					{
 						"internalType": "uint256",
+						"name": "currentPrice",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
 						"name": "startTime",
 						"type": "uint256"
 					},
@@ -288,6 +293,21 @@
 						"internalType": "uint256",
 						"name": "winningTokenId",
 						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "lastBidTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "proofSubmitted",
+						"type": "bool"
+					},
+					{
+						"internalType": "bool",
+						"name": "claimed",
+						"type": "bool"
 					},
 					{
 						"internalType": "bool",
@@ -423,11 +443,11 @@
 			]
 		},
 		"contracts/PlaceholderAdsMarketplace.sol": {
-			"keccak256": "0x8534683b7dca0ecb5c43e4496d1b47c9c546bb5ce803433de080b4723e45f487",
+			"keccak256": "0x16dc08b040e3e56b23bc83781dae97d208479cf3ac6d0ba5527177761fe1c87e",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://0bf2f331f394b08e14c8a806345256180e5b8a9889e10132cd4a47a17667fa8d",
-				"dweb:/ipfs/QmWJ4MxCzjpoxu2qZ9ULwLKe18UfmhwQgmBXND1HAJxQSa"
+				"bzz-raw://8b1cb2e42e9f6cc873cee47ba33f4bf74b96fb2aefc90c501a7590b06d5e9412",
+				"dweb:/ipfs/QmQbjk3MLdjfcCBcHJ1cXFnudN8YNcVMugU1ZMp7sWGGEj"
 			]
 		}
 	},

@@ -490,11 +490,11 @@
 			]
 		},
 		"contracts/PlaceholderStableCoin.sol": {
-			"keccak256": "0x44acc0699b90ffbf2de33cc246c531f3437aa9615ff710e4be97e50c9c07a070",
+			"keccak256": "0xf77467e7f32d545080ceeedc5de2aaafcd0af9346ccf3d8c6d0c4aebd3818a8c",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://e045e9b45fe0895aa416d1a2563a6e7e1769cc7fc28f1e61f3679f99bd5cd9cb",
-				"dweb:/ipfs/QmSxzBoT8AErSxWbFi3dUYPanznxCQVuYU791SzzyZWnqz"
+				"bzz-raw://1a45e49a74e4afd6d075145389c45031799b9a84ee361946519fba4c57cdede9",
+				"dweb:/ipfs/QmYWwPRcESvAxd1CqKg7e6y9uSGvfXevYf42fMPUiDpeay"
 			]
 		}
 	},

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
@@ -79,7 +79,7 @@ contract PlaceholderAdsMarketplace is ReentrancyGuard {
         require(_startPrice > 0, "Start price must be greater than 0"); // Added
         require(_endPrice <= _startPrice, "End price must be <= start price");
         uint256 startTime = block.timestamp;
-        uint256 duration = 3 minutes; // Fixed 3-minute duration
+        uint256 duration = 5 minutes; // Fixed 3-minute duration
 
         currentAuction = Auction({
             startPrice: _startPrice,
@@ -231,23 +231,31 @@ contract PlaceholderAdsMarketplace is ReentrancyGuard {
         returns (
             uint256 startPrice,
             uint256 endPrice,
+            uint256 currentPrice,
             uint256 startTime,
             uint256 duration,
             address winner,
             uint256 winningBid,
             uint256 winningTokenId,
-            bool ended
-        )
+            uint256 lastBidTime,
+            bool proofSubmitted,
+            bool claimed,
+            bool ended        )
     {
         Auction memory a = currentAuction;
+        uint256 CurrentPrice = getCurrentPrice();
         return (
             a.startPrice,
             a.endPrice,
+            CurrentPrice,
             a.startTime,
             a.duration,
             a.winner,
             a.winningBid,
             a.winningTokenId,
+            a.lastBidTime,
+            a.proofSubmitted,
+            a.claimed,
             a.ended
         );
     }
