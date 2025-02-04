@@ -2,8 +2,8 @@
 pragma solidity ^0.8.19;
 
 import { PlaceholderAdsNFT } from "../src/PlaceholderAdsNFT.sol";
-import { console2 } from "forge-std/Console2.sol";
 import { Script } from "forge-std/Script.sol";
+import { console2 } from "forge-std/console2.sol";
 
 contract MintAdScript is Script {
     function run() external {
