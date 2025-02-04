@@ -1,0 +1,47 @@
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+fs_permissions = [{ access = "read-write", path = "./deployments" }]
+
+etherscan_api_key = "${ETHERSCAN_API_KEY}"
+
+[fmt]
+# Maximum line length where formatter will try to wrap the line
+line_length = 120
+
+# Number of spaces per indentation level
+tab_width = 4
+
+# Print spaces between brackets
+bracket_spacing = true
+
+# Style of function parameters/arguments
+func_brackets_newline = true
+
+# Style of array brackets
+array_brackets = "always"
+
+# Put function attributes on their own line
+func_attrs_newline = true
+
+# Maximum number of blank lines to keep
+max_line_length = 120
+
+# Quote style for strings ('single' or 'double')
+quote_style = 'double'
+
+# Add space after control flow keywords
+keyword_spacing = true
+
+# Sort imports
+sort_imports = true
+
+# Sort contract elements (functions, events, etc.)
+contract_member_ordering = true
+
+# Number of blank lines around top level declarations
+top_level_line_count = 2
+
+# Add newline at end of file
+end_of_line = true
