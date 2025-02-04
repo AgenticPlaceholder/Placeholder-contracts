@@ -102,8 +102,7 @@ contract DeployPlaceholderAds is Script {
     }
 
     function writeDeploymentInfo(string memory json) internal {
-        string memory deploymentPath =
-            string.concat(vm.projectRoot(), "/deployments/", vm.toString(block.chainid), "_deployment.json");
+        string memory deploymentPath = string.concat(vm.projectRoot(), "/deployments/", "deployment.json");
 
         // Create deployments directory if it doesn't exist
         vm.createDir("deployments", true);

@@ -1,32 +1,33 @@
-.PHONY: all anvil deploy help build test clean
+include .env
+export
 
-help:
-	@echo "Available targets:"
-	@echo "  anvil         - Run Anvil local network"
-	@echo "  build         - Build the project"
-	@echo "  test          - Run tests"
-	@echo "  deploy        - Deploy to local Anvil network"
-	@echo "  clean         - Remove build artifacts"
-
-# Start Anvil
-anvil:
-	anvil
-
-# Build the project
-build:
-	forge build
-
-# Run tests
-test:
-	forge test -vv
-
-# Clean build artifacts
-clean:
-	forge clean
-
-# Deploy to Anvil
 deploy:
 	forge script script/DeployPlaceholderAds.s.sol:DeployPlaceholderAds --rpc-url  https://sepolia.base.org --broadcast --verify
 
-# Default target
-all: clean build test
+mint: 
+	forge script script/MintStableCoin.s.sol --rpc-url  https://sepolia.base.org --broadcast
+
+approve:
+
+	forge script script/ApproveMarketplace.s.sol --rpc-url  https://sepolia.base.org --broadcast
+	
+mint-ad1:
+	forge script script/MintAd.s.sol:MintAdScript --private-key $$PRIVATE_KEY_1 --rpc-url https://sepolia.base.org --broadcast
+
+mint-ad2:
+	forge script script/MintAd.s.sol:MintAdScript --private-key $$PRIVATE_KEY_2 --rpc-url https://sepolia.base.org --broadcast	
+
+mint-ad3:
+	forge script script/MintAd.s.sol:MintAdScript --private-key $$PRIVATE_KEY_3 --rpc-url https://sepolia.base.org --broadcast		
+
+auction:
+	forge script script/StartAuctionScript.s.sol:StartAuctionScript --rpc-url https://sepolia.base.org --broadcast	
+
+bid:
+	forge script script/PlaceBid.s.sol --private-key $$PRIVATE_KEY_1 --rpc-url https://sepolia.base.org --broadcast
+
+bid2:
+	forge script script/PlaceBid.s.sol --private-key $$PRIVATE_KEY_2 --rpc-url https://sepolia.base.org --broadcast
+
+bid3: 
+	forge script script/PlaceBid.s.sol --private-key $$PRIVATE_KEY_3 --rpc-url https://sepolia.base.org --broadcast	
