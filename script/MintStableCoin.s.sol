@@ -20,8 +20,7 @@ contract MintStableCoin is Script {
     function setUp() public { }
 
     function getStableCoinAddress() internal view returns (address) {
-        string memory deploymentPath =
-            string.concat(vm.projectRoot(), "/deployments/", vm.toString(block.chainid), "_deployment.json");
+        string memory deploymentPath = string.concat(vm.projectRoot(), "/deployments/deployment.json");
 
         string memory json = vm.readFile(deploymentPath);
         bytes memory addressBytes = vm.parseJson(json, ".contracts.PlaceholderStableCoin.address");

@@ -18,7 +18,7 @@ contract MintAdScript is Script {
         PlaceholderAdsNFT nft = PlaceholderAdsNFT(nftAddress);
 
         uint256 tokenId = nft.createAd(
-            0xbb02a9D6A71A847D587cE4Dbb92F32f79c2EfB2a,
+            msg.sender,
             "Sample Advertisement",
             "This is a test advertisement minted via Foundry script",
             "https://placeholderads.s3.ap-south-1.amazonaws.com/ad-images/1738575381353-6912.png"

@@ -31,8 +31,8 @@ contract DeployPlaceholderAds is Script {
 
         // 3. Deploy the marketplace with required parameters
         marketplace = new PlaceholderAdsMarketplace(
-            address(nft), // NFT contract address
-            address(stablecoin) // Bidding token address
+            address(stablecoin), // Bidding token address
+            address(nft) // NFT contract
         );
         console.log("PlaceholderAdsMarketplace deployed to:", address(marketplace));
 

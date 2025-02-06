@@ -88,4 +88,30 @@ contract PlaceholderAdsNFT is ERC721, Ownable {
     function getAdData(uint256 tokenId) public view returns (AdData memory) {
         return _adMetadata[tokenId];
     }
+    /**
+     * @dev Returns an array of token IDs owned by a specific address
+     * @param owner The address to query
+     * @return result An array of token IDs
+     */
+
+    function getOwnedTokens(address owner) public view returns (uint256[] memory) {
+        // Get the total number of tokens owned by the address
+        uint256 tokenCount = balanceOf(owner);
+
+        // Create an array to store the token IDs
+        uint256[] memory result = new uint256[](tokenCount);
+
+        // Counter for found tokens
+        uint256 resultIndex = 0;
+
+        // Iterate through all possible tokens up to _nextTokenId
+        for (uint256 i = 0; i < _nextTokenId; i++) {
+            if (ownerOf(i) == owner) {
+                result[resultIndex] = i;
+                resultIndex++;
+            }
+        }
+
+        return result;
+    }
 }

@@ -7,7 +7,7 @@ import "forge-std/console.sol";
 
 contract ApproveMarketplace is Script {
     // The amount to approve (1000 tokens with 18 decimals)
-    uint256 constant APPROVAL_AMOUNT = 1000 * 10 ** 18;
+    uint256 constant APPROVAL_AMOUNT = 100000 * 10 ** 18;
 
     // Array of addresses to approve from
     address[] public addresses = [

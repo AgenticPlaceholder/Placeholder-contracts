@@ -13,6 +13,7 @@ interface IPlaceholderAdsNFT {
     }
 
     function getAdData(uint256 tokenId) external view returns (AdData memory);
+    function ownerOf(uint256 tokenId) external view returns (address);
 }
 
 contract PlaceholderAdsMarketplace is ReentrancyGuard {
@@ -150,6 +151,8 @@ contract PlaceholderAdsMarketplace is ReentrancyGuard {
     }
 
     function placeBid(uint256 _tokenId, uint256 _bidAmount) external nonReentrant auctionActive {
+        // Require he owns the tokenID
+        require(nftContract.ownerOf(_tokenId) == msg.sender, "You don't own this token");
         uint256 currentPrice = getCurrentPrice();
         require(_bidAmount >= currentPrice, "Bid below current price");
         require(_bidAmount > 0, "Bid amount must be greater than 0");
