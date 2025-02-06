@@ -30,7 +30,7 @@ contract PlaceBidScript is Script {
         console2.log("Time remaining:", timeRemaining);
 
         // For this example, we'll bid for token ID 1
-        uint256 tokenId = 1;
+        uint256 tokenId = 0;
 
         vm.startBroadcast();
 

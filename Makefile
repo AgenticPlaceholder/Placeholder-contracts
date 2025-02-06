@@ -4,7 +4,7 @@ export
 deploy:
 	forge script script/DeployPlaceholderAds.s.sol:DeployPlaceholderAds --rpc-url  https://sepolia.base.org --broadcast --verify
 
-mint: 
+psdt: 
 	forge script script/MintStableCoin.s.sol --rpc-url  https://sepolia.base.org --broadcast
 
 approve:

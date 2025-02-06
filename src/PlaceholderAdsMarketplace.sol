@@ -26,14 +26,20 @@ contract PlaceholderAdsMarketplace is ReentrancyGuard {
     event BidPlaced(address bidder, uint256 bidAmount, uint256 tokenId);
     event ProofSubmitted(uint256 tokenId, bytes32 proofHash);
     event PaymentClaimed(uint256 tokenId, uint256 amount);
-    event WinningAdSelected(uint256 indexed tokenId, string title, string imageURL, address indexed publisher);
-
+    event WinningAdSelected(
+        uint256 indexed tokenId,
+        string title,
+        string content,
+        string imageURL,
+        address indexed publisher,
+        uint256 bidAmount
+    );
     // --------------------------------------
     // STORAGE
     // --------------------------------------
+
     address public operator;
     IERC20 public biddingToken;
-    uint256 public constant MINIMUM_BID_PERIOD = 20 seconds;
 
     struct Auction {
         uint256 startPrice;
@@ -43,7 +49,6 @@ contract PlaceholderAdsMarketplace is ReentrancyGuard {
         address winner;
         uint256 winningBid;
         uint256 winningTokenId;
-        uint256 lastBidTime;
         bool proofSubmitted;
         bool claimed;
         bool ended;
@@ -95,7 +100,7 @@ contract PlaceholderAdsMarketplace is ReentrancyGuard {
         require(_startPrice - _endPrice >= _startPrice / 100, "Price difference too small");
 
         uint256 startTime = block.timestamp;
-        uint256 duration = 1 minutes;
+        uint256 duration = 5 minutes;
 
         currentAuction = Auction({
             startPrice: _startPrice,
@@ -105,7 +110,6 @@ contract PlaceholderAdsMarketplace is ReentrancyGuard {
             winner: address(0),
             winningBid: 0,
             winningTokenId: 0,
-            lastBidTime: 0,
             proofSubmitted: false,
             claimed: false,
             ended: false
@@ -166,7 +170,18 @@ contract PlaceholderAdsMarketplace is ReentrancyGuard {
 
         emit BidPlaced(msg.sender, _bidAmount, _tokenId);
         emit AuctionEnded(msg.sender, _bidAmount, _tokenId);
-        emit WinningAdSelected(_tokenId, adData.title, adData.imageURL, adData.publisher);
+        emit WinningAdSelected(
+            _tokenId, adData.title, adData.content, adData.imageURL, adData.publisher, currentAuction.winningBid
+        );
+    }
+
+    function endAuctionNoBids() external onlyOperator {
+        require(!currentAuction.ended, "Auction already ended");
+        require(block.timestamp > currentAuction.startTime + currentAuction.duration, "Auction not finished");
+        require(currentAuction.winner == address(0), "Winner already exists");
+
+        currentAuction.ended = true;
+        // Possibly emit an AuctionCancelled or AuctionNoBids event
     }
 
     function submitProof(uint256 _tokenId, bytes32 _proofHash) external onlyOperator {
@@ -235,12 +250,8 @@ contract PlaceholderAdsMarketplace is ReentrancyGuard {
         return (currentAuction.winner, currentAuction.winningBid, currentAuction.winningTokenId);
     }
 
-    function getAdminState()
-        external
-        view
-        returns (uint256 lastBidTime, bool proofSubmitted, bool claimed, bool ended)
-    {
-        return (currentAuction.lastBidTime, currentAuction.proofSubmitted, currentAuction.claimed, currentAuction.ended);
+    function getAdminState() external view returns (bool proofSubmitted, bool claimed, bool ended) {
+        return (currentAuction.proofSubmitted, currentAuction.claimed, currentAuction.ended);
     }
 
     function changeOperator(address _newOperator) external onlyOperator {

@@ -18,8 +18,7 @@ contract ApproveMarketplace is Script {
     ];
 
     function getDeployedAddresses() internal view returns (address stablecoin, address marketplace) {
-        string memory deploymentPath =
-            string.concat(vm.projectRoot(), "/deployments/", vm.toString(block.chainid), "_deployment.json");
+        string memory deploymentPath = string.concat(vm.projectRoot(), "/deployments/deployment.json");
 
         string memory json = vm.readFile(deploymentPath);
 

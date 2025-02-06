@@ -15,8 +15,8 @@ contract StartAuctionScript is Script {
         address marketplaceAddress = deploymentJson.readAddress(".contracts.PlaceholderAdsMarketplace.address");
 
         // Configure auction parameters
-        uint256 startPrice = 1000e18; // 1000 stable coins
-        uint256 endPrice = 100e18; // 100 stable coins
+        uint256 startPrice = 100e18; // 1000 stable coins
+        uint256 endPrice = 10e18; // 100 stable coins
 
         // Load private key for transaction signing
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
