@@ -88,7 +88,7 @@ contract PlaceholderAdsMarketplace is ReentrancyGuard {
     // --------------------------------------
     // AUCTION LOGIC
     // --------------------------------------
-    function startAuction(uint256 _startPrice, uint256 _endPrice) external onlyOperator {
+    function startAuction(uint256 _startPrice, uint256 _endPrice, uint256 _duration) external onlyOperator {
         // Simplified auction state check
         require(currentAuction.startTime == 0 || currentAuction.ended, "Existing auction not ended");
 
@@ -101,7 +101,7 @@ contract PlaceholderAdsMarketplace is ReentrancyGuard {
         require(_startPrice - _endPrice >= _startPrice / 100, "Price difference too small");
 
         uint256 startTime = block.timestamp;
-        uint256 duration = 5 minutes;
+        uint256 duration = _duration;
 
         currentAuction = Auction({
             startPrice: _startPrice,
@@ -151,8 +151,9 @@ contract PlaceholderAdsMarketplace is ReentrancyGuard {
     }
 
     function placeBid(uint256 _tokenId, uint256 _bidAmount) external nonReentrant auctionActive {
+        IPlaceholderAdsNFT.AdData memory adData = nftContract.getAdData(_tokenId);
         // Require he owns the tokenID
-        require(nftContract.ownerOf(_tokenId) == msg.sender, "You don't own this token");
+        require(nftContract.ownerOf(_tokenId) == adData.publisher, "You don't own this token");
         uint256 currentPrice = getCurrentPrice();
         require(_bidAmount >= currentPrice, "Bid below current price");
         require(_bidAmount > 0, "Bid amount must be greater than 0");
@@ -164,15 +165,13 @@ contract PlaceholderAdsMarketplace is ReentrancyGuard {
         require(biddingToken.transferFrom(msg.sender, address(this), _bidAmount), "Token transfer failed");
 
         // Update auction state
-        currentAuction.winner = msg.sender;
+        currentAuction.winner = adData.publisher;
         currentAuction.winningBid = _bidAmount;
         currentAuction.winningTokenId = _tokenId;
         currentAuction.ended = true;
 
-        IPlaceholderAdsNFT.AdData memory adData = nftContract.getAdData(_tokenId);
-
-        emit BidPlaced(msg.sender, _bidAmount, _tokenId);
-        emit AuctionEnded(msg.sender, _bidAmount, _tokenId);
+        emit BidPlaced(adData.publisher, _bidAmount, _tokenId);
+        emit AuctionEnded(adData.publisher, _bidAmount, _tokenId);
         emit WinningAdSelected(
             _tokenId, adData.title, adData.content, adData.imageURL, adData.publisher, currentAuction.winningBid
         );

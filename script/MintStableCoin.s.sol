@@ -7,7 +7,7 @@ import "forge-std/console.sol";
 
 contract MintStableCoin is Script {
     // The amount to mint for each address (1000 tokens with 18 decimals)
-    uint256 constant MINT_AMOUNT = 1000 * 10 ** 18;
+    uint256 constant MINT_AMOUNT = 100000 * 10 ** 18;
 
     // Array of recipient addresses
     address[] public recipients = [
