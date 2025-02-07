@@ -75,9 +75,9 @@ contract MintStableCoin is Script {
         console.log("\nMinting process completed!");
         console.log("====================================");
 
-        // Save minting information to a JSON file
-        string memory json = generateMintingJson(stablecoinAddress);
-        writeMintingInfo(json);
+        // // Save minting information to a JSON file
+        // string memory json = generateMintingJson(stablecoinAddress);
+        // writeMintingInfo(json);
     }
 
     // Rest of the functions remain unchanged...

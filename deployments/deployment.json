@@ -2,22 +2,22 @@
   "network": 84532,
   "contracts": {
     "PlaceholderAdsNFT": {
-      "address": "0x09BA65e75e660Ad96927385EE5c69e1A289a3A7C",
-      "explorer": "https://sepolia.basescan.org/address/0x09BA65e75e660Ad96927385EE5c69e1A289a3A7C",
-      "deployedAt": 1738937616
+      "address": "0xdAd6e3d08Af425004C1DBf5a777A9906346Eed9f",
+      "explorer": "https://sepolia.basescan.org/address/0xdAd6e3d08Af425004C1DBf5a777A9906346Eed9f",
+      "deployedAt": 1738955238
     },
     "PlaceholderStableCoin": {
-      "address": "0xCFE2f7254692bBd99B67a4d7D429F46B7B5E6C92",
-      "explorer": "https://sepolia.basescan.org/address/0xCFE2f7254692bBd99B67a4d7D429F46B7B5E6C92",
-      "deployedAt": 1738937616
+      "address": "0xF806916058553B33c87D23b9E9698b4df32cb5b9",
+      "explorer": "https://sepolia.basescan.org/address/0xF806916058553B33c87D23b9E9698b4df32cb5b9",
+      "deployedAt": 1738955238
     },
     "PlaceholderAdsMarketplace": {
-      "address": "0x0765e09c95E7D3F43c5EC2DcCeFA46B2e4a12CA3",
-      "explorer": "https://sepolia.basescan.org/address/0x0765e09c95E7D3F43c5EC2DcCeFA46B2e4a12CA3",
-      "deployedAt": 1738937616,
+      "address": "0x06f8DA200F0128cFE455B4a1482B1E8949F0174F",
+      "explorer": "https://sepolia.basescan.org/address/0x06f8DA200F0128cFE455B4a1482B1E8949F0174F",
+      "deployedAt": 1738955238,
       "constructorArgs": {
-        "nft": "0x09BA65e75e660Ad96927385EE5c69e1A289a3A7C",
-        "stablecoin": "0xCFE2f7254692bBd99B67a4d7D429F46B7B5E6C92"
+        "nft": "0xdAd6e3d08Af425004C1DBf5a777A9906346Eed9f",
+        "stablecoin": "0xF806916058553B33c87D23b9E9698b4df32cb5b9"
       }
     }
   }

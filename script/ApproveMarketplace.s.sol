@@ -103,9 +103,9 @@ contract ApproveMarketplace is Script {
         console.log("\nApproval process completed!");
         console.log("====================================");
 
-        // Save approval information to a JSON file
-        string memory json = generateApprovalJson(stablecoinAddress, marketplaceAddress);
-        writeApprovalInfo(json);
+        // // Save approval information to a JSON file
+        // string memory json = generateApprovalJson(stablecoinAddress, marketplaceAddress);
+        // writeApprovalInfo(json);
     }
 
     function generateApprovalJson(address stablecoinAddress, address marketplaceAddress)
